@@ -1,0 +1,113 @@
+*******************************************************
+psycopg Streets
+*******************************************************
+Insert:
+python main.py streets insert '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)","epsg":25830}'
+python main.py streets insert '{"name":"Avenida del Test","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370680)","epsg":25830}'
+python main.py streets insert '{"name":"Avenida del Error","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370579)","epsg":25830}'
+
+Delete:
+python main.py streets delete '{"id": "10"}'
+
+Update:
+python main.py streets update '{"id":2,"name":"Avenida del Update","description":"Updated description","length":6000.0,"lanes":6,"category":"Avenue","visitedAt":"2026-03-01","geom":"LINESTRING(727750 4370590,727700 4370500,727780 4370650)","epsg":25830}'
+
+Select:
+python main.py streets select_as_tuple '{"id":9}'
+python main.py streets select_as_dict '{"id":9}'
+
+
+*******************************************************
+psycopg Buildings
+*******************************************************
+Insert:
+python main.py buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+python main.py buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","area":100000000,"height":0,"category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735001 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+
+
+Delete:
+python main.py buildings delete '{"id": 10}'
+
+Update:
+python main.py buildings update '{"id":9,"name":"Updated Valencia","description":"New description","area":200000000,"height":10,"category":"city","visitedAt":"2026-02-28","geom":"POLYGON((0 0,10 0,10 10,0 10,0 0))","epsg":25830}'
+
+Select:
+python main.py buildings select_as_tuple '{"id":"9"}'
+python main.py buildings select_as_dict '{"id":"9"}'
+
+
+*******************************************************
+psycopg points
+*******************************************************
+Insert:
+python main.py points insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"priority":1,"visitedAt":"2026-02-26","geom":"POINT(727722 4370576)","epsg":25830}'
+
+Delete:
+python main.py points delete '{"id":14}'
+
+Update:
+python main.py points update '{"id":14,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"priority":10,"visitedAt":"2026-02-28","geom":"POINT(727750 4370590)","epsg":25830}'
+
+Select
+python main.py points select_as_dict '{"id":14}'
+python main.py points select_as_tuple '{"id":14}'
+
+
+*******************************************************
+DJAGNO Buildings
+*******************************************************
+
+Insert:
+python manage.py runscript test_buildings --script-args buildings insert '{"name":"Valencia Rectangle","description":"Approximate bounding box of Valencia","height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000 4370000,735000 4370000,735000 4380000,725000 4380000,725000 4370000))","epsg":25830}'
+python manage.py runscript test_buildings --script-args buildings insert '{"name":" Rectangle","description":"Approximate bounding box of Valencia","height":0,"floors": 0, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((725000.123456789 4370000,735000 4370000,735000 4380000,725000 4380000,725000.123456789 4370000))"}'
+python manage.py runscript test_buildings --script-args buildings insert "{\"name\":\"Building A\",\"description\":\"Test building near Valencia center\",\"height\":12,\"floors\":3,\"category\":\"residential\",\"visitedAt\":\"2026-02-26\",\"geom\":\"POLYGON((728100 4372100,728120 4372100,728120 4372120,728100 4372120,728100 4372100))\"}"
+python manage.py runscript test_buildings --script-args buildings insert "{\"name\":\"Building B\",\"description\":\"Office building Valencia\",\"height\":25,\"floors\":6,\"category\":\"office\",\"visitedAt\":\"2026-02-26\",\"geom\":\"POLYGON((729000 4373000,729030.1234567 4373000,729030 4373030,729000 4373030,729000 4373000))\"}"
+python manage.py runscript test_buildings --script-args buildings insert "{\"name\":\"Building C\",\"description\":\"Small commercial building\",\"height\":8,\"floors\":2,\"category\":\"commercial\",\"visitedAt\":\"2026-02-26\",\"geom\":\"POLYGON((727500 4371500,727520 4371500,727520 4371520,727500 4371520,727500 4371500))\"}"
+
+select_as_dict
+python manage.py runscript test_buildings --script-args buildings select_as_dict '{"id": 1}'
+
+Update:
+python manage.py runscript test_buildings --script-args buildings update '{"id": 1, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((728000 4380000,735000 4370000,735000 4380000,725000 4380000,728000 4380000))"}'
+python manage.py runscript test_buildings --script-args buildings update '{"id": 3, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((1 0,1 1,0 1,0 0,1 0))"}'
+python manage.py runscript test_buildings --script-args buildings update '{"id": 1, "name":"Updated Rectangle","description":"Approximate bounding box of Valencia","area":200000000,"height":1,"floors": 1, "category":"city","visitedAt":"2026-02-26","geom":"POLYGON((727500 4371500,727520 4371500,727520 4371520,727500 4371520,727500 4371500))"}'
+
+Delete:
+python manage.py runscript test_buildings --script-args buildings delete '{"id": 1}'
+
+
+*******************************************************
+DJAGNO Streets
+*******************************************************
+
+Insert:
+python manage.py runscript test_buildings --script-args streets insert '{"name":"Avenida del Puerto","description":"Avenue to the harbour","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727722 4370576,727780 4370580)"}'
+python manage.py runscript test_buildings --script-args streets insert '{"name":"Avenida del Test","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370680)"}'
+python manage.py runscript test_buildings --script-args streets insert '{"name":"Avenida del Error","description":"Avenue","length":5000.0,"lanes":5,"category":"Avenue","visitedAt":"2026-02-26","geom":"LINESTRING(727822 4370676,727880 4370579)"}'
+
+Update:
+python manage.py runscript test_buildings --script-args streets update '{"id":1,"name":"Avenida del Update","description":"Updated description","length":6000.0,"lanes":6,"category":"Avenue","visitedAt":"2026-03-01","geom":"LINESTRING(727750 4370590,727700 4370500,727780 4370650)"}'
+
+select_as_dict:
+python manage.py runscript test_buildings --script-args streets select_as_dict '{"id": 1}'
+
+Delete:
+python manage.py runscript test_buildings --script-args streets delete '{"id": 2}'
+
+*******************************************************
+DJAGNO POI
+*******************************************************
+
+Insert:
+python manage.py runscript test_buildings --script-args points insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"visitedAt":"2026-02-26","geom":"POINT(727722 4370576)"}'
+python manage.py runscript test_buildings --script-args points insert '{"name":"Palau de les Arts","description":"Opera house in Valencia","category":"landmark","rating":5,"visitedAt":"2026-02-26","geom":"POINT(727725 4370575)"}'
+
+Delete:
+python manage.py runscript test_buildings --script-args points delete '{"id":1}'
+
+Update:
+python manage.py runscript test_buildings --script-args points update '{"id":1,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"visitedAt":"2026-02-28","geom":"POINT(727750 4370590)"}'
+python manage.py runscript test_buildings --script-args points update '{"id":3,"name":"Updated Point","description":"Updated description","category":"Updated Category","rating":10,"visitedAt":"2026-02-28","geom":"POINT(727722 4370576)"}'
+
+Select
+python manage.py runscript test_buildings --script-args points select_as_dict '{"id":1}'
