@@ -19,7 +19,6 @@ Username and Password can be changed in .env.dev, there all the environment vari
 PgAdmin is like a "window" into the database, when first setting it up it might be that you need to connect to the database first, ask ChatGPT when that happens. Host Name can be found in the env.dev.
 PgAdmin in our case has several databases, the database **web** is used for the psycopg stuff and **web_proj** is used for the Django Stuff. 
 
-<img width="1916" height="908" alt="image" src="https://github.com/user-attachments/assets/9e70051d-ca52-4393-ac7d-ec9630ad5a13" />
 
 The database for the Django Project is set in the file .env.dev:
 
