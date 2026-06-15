@@ -1,17 +1,3 @@
-
-The goal of this project is to understand two different ways of interacting with a PostGIS database:
-
-Low-level approach (psycopg)
-→ You manually write SQL queries and execute them from Python.
-High-level approach (Django ORM)
-→ You use Django models to interact with the database in a more abstract way.
-
-👉 This helps you understand:
-
-How SQL + PostGIS works internally
-How Django simplifies database interaction
-The difference between raw SQL and ORM
-
 ## 1. Start the Project (Docker)
 Make sure you are in the root folder (where docker-compose.yml is located). Docker has to run to be able to start the containers on windows.
 When starting the first time you need to build the containers and start them with: 
@@ -31,9 +17,8 @@ password: vagrant
 
 Username and Password can be changed in .env.dev, there all the environment variables are stored.
 PgAdmin is like a "window" into the database, when first setting it up it might be that you need to connect to the database first, ask ChatGPT when that happens. Host Name can be found in the env.dev.
-PgAdmin in our case has several databases, the database **practica** is used for the psycopg stuff and **ersamus_valencia** is used for the Django Stuff. 
+PgAdmin in our case has several databases, the database **web** is used for the psycopg stuff and **web_proj** is used for the Django Stuff. 
 
-<img width="1916" height="908" alt="image" src="https://github.com/user-attachments/assets/9e70051d-ca52-4393-ac7d-ec9630ad5a13" />
 
 The database for the Django Project is set in the file .env.dev:
 
