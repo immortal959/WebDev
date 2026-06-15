@@ -53,12 +53,12 @@ class LoginView(View):
             return JsonResponse({"ok":False,"message": "Wrong user or password", "data":[]},status=400)
 
 class LogoutView(LoginRequiredMixin, View):
+    raise_exception = True
     def post(self, request, *args, **kwargs):
         username=request.user.username
-        logout(request) #removes from the header of the request
-                            #the the session_id, stored in a cookie
+        logout(request)
         return JsonResponse({"ok":True,"message": "The user {0} is now logged out".format(username), "data":[]}, status=200)
-
+        
 class IsLoggedIn(View):
     def post(self, request, *args, **kwargs):
         print(request.user.username)

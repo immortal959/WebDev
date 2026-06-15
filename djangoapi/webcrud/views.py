@@ -6,8 +6,8 @@ from web_proj.models import Building, Street, Point
 
 
 def read_json(request):
-    body = request.body.decode("utf-8")
-    return json.loads(body)
+    # Data comes as URL-encoded from Angular ApiService
+    return request.POST
 
 
 def building_to_dict(row):

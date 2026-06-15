@@ -33,7 +33,7 @@ class HelloWord(View):
     def get(self, request):
         return JsonResponse({"ok":True,"message": "Buildings. Hello world", "data":[]})
 
-class BuildigsView(LoginRequiredMixin, BaseDjangoView):
+class BuildigsView(BaseDjangoView):
     """
 
     The get and post methods are defined in the BaseDjangoView. They forward the request

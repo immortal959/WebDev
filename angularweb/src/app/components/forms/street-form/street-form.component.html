@@ -1,31 +1,38 @@
 <div class="flexbox-exterior-container">
     <div class="flexbox-responsive-interior-container-500px">
         <h6 class="text-align-center">Streets form</h6>
-
         <form [formGroup]="controlsGroup">
             <p>Specify the id only in case of select, update or delete</p>
             <mat-form-field>
                 <input matInput placeholder="id" [formControl]="id" name="id">
-            </mat-form-field>
-            <br>
+            </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Name" [formControl]="name" name="name">
-            </mat-form-field>
-            <br>
+            </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Description" [formControl]="description" name="description">
-            </mat-form-field>
-            <br>
+            </mat-form-field><br>
+            <mat-form-field>
+                <input matInput placeholder="Length (m)" type="number" [formControl]="length" name="length">
+            </mat-form-field><br>
+            <mat-form-field>
+                <input matInput placeholder="Lanes" type="number" [formControl]="lanes" name="lanes">
+            </mat-form-field><br>
+            <mat-form-field>
+                <input matInput placeholder="Category" [formControl]="category" name="category">
+            </mat-form-field><br>
+            <mat-form-field>
+                <input matInput placeholder="Visited at (e.g. 2026-06-15T10:00:00Z)" [formControl]="visitedAt" name="visitedAt">
+            </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Geometry WKT" [formControl]="geom" name="geom">
-            </mat-form-field>
-            <br>
+            </mat-form-field><br>
             <button mat-button matTooltip="Insert" mat-raised-button [disabled]="!controlsGroup.valid" (click)="insert()">Insert</button>
             <button mat-button matTooltip="Delete" (click)="deleteRow()">Delete</button>
             <button mat-button matTooltip="Update" (click)="update()">Update</button>
             <button mat-button matTooltip="Select" (click)="select()">Select</button>
             <button mat-button matTooltip="Select all" (click)="selectAll()">Select all</button>
-            @if (geomInUrl){
+            @if (geomInUrl) {
                 <button mat-button matTooltip="Use geom in url" (click)="useGeomInUrl()">Use geom in url</button>
             }
             <button mat-button matTooltip="Clear form" (click)="clearForm()">Clear form</button>
@@ -33,21 +40,16 @@
             <p>{{serverMessage}}</p>
         </form>
     </div>
-    @if (l.length > 0){
+    @if (l.length > 0) {
         <div class="margin-10px">
             <table>
                 <tr>
-                    <th>id</th>
-                    <th>name</th>
-                    <th>description</th>
-                    <th>geom</th>
+                    <th>id</th><th>name</th><th>description</th><th>length</th><th>lanes</th><th>category</th>
                 </tr>
-                @for (s of l;track s.id){
-                    <tr (click)="setDataInForm(s)">
-                        <td>{{s.id}}</td>
-                        <td>{{s.name}}</td>
-                        <td>{{s.description}}</td>
-                        <td>{{s.geom}}</td>
+                @for (s of l; track s['id']) {
+                    <tr (click)="id.setValue(s['id']); name.setValue(s['name']); description.setValue(s['description']); length.setValue(s['length']); lanes.setValue(s['lanes']); category.setValue(s['category']); visitedAt.setValue(s['visitedAt']); geom.setValue(s['geom'])">
+                        <td>{{s['id']}}</td><td>{{s['name']}}</td><td>{{s['description']}}</td>
+                        <td>{{s['length']}}</td><td>{{s['lanes']}}</td><td>{{s['category']}}</td>
                     </tr>
                 }
             </table>
