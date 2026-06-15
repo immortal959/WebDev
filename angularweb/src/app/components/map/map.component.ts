@@ -6,13 +6,14 @@ import { DrawPointComponent } from '../draw-point/draw-point.component';
 import { SelectFeatureComponent } from '../select-feature/select-feature.component';
 import { ApiService } from '../../services/api.service';
 import { ServerAnswerModel } from '../../models/server-answer.model';
+import { EditFeatureComponent } from '../edit-feature/edit-feature.component';
 import WKT from 'ol/format/WKT';
 import Feature from 'ol/Feature';
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [DrawBuildingComponent, DrawStreetComponent, DrawPointComponent, SelectFeatureComponent],
+  imports: [DrawBuildingComponent, DrawStreetComponent, DrawPointComponent, SelectFeatureComponent, EditFeatureComponent],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
