@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { OnInit, Component, OnDestroy } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MapService } from '../../services/map.service';
@@ -18,7 +18,7 @@ import { EventModel } from '../../models/event.model';
   templateUrl: './draw-street.component.html',
   styleUrl: './draw-street.component.scss'
 })
-export class DrawStreetComponent implements AfterViewInit, OnDestroy{
+export class DrawStreetComponent implements OnInit, OnDestroy{
   drawMode: boolean = false;
   drawStreet: Draw | undefined;
 
@@ -31,7 +31,7 @@ export class DrawStreetComponent implements AfterViewInit, OnDestroy{
     });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     console.log("DrawStreetComponent initialized");
     this.addDrawStreetInteraction();
     this.disableDrawStreets();

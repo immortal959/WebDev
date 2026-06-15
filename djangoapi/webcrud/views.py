@@ -53,6 +53,17 @@ class BuildingView(BaseDjangoView):
     def insert(self, request):
         try:
             data = read_json(request)
+            geom = GEOSGeometry(data["geom"], srid=25830)
+            
+            # Check if geometry is valid
+            if not geom.valid:
+                return JsonResponse({"ok": False, "message": "Invalid geometry", "data": []})
+            
+            # Check if geometry intersects with existing buildings
+            existing = Building.objects.filter(geom__intersects=geom)
+            if existing.exists():
+                return JsonResponse({"ok": False, "message": "Building intersects with an existing building", "data": []})
+            
             row = Building(
                 name=data["name"],
                 description=data["description"],
@@ -60,7 +71,7 @@ class BuildingView(BaseDjangoView):
                 height=data["height"],
                 category=data["category"],
                 visitedAt=data["visitedAt"],
-                geom=GEOSGeometry(data["geom"], srid=25830)
+                geom=geom
             )
             row.save()
             return JsonResponse({"ok": True, "message": "Building inserted", "data": [building_to_dict(row)]})
@@ -112,6 +123,16 @@ class StreetView(BaseDjangoView):
     def insert(self, request):
         try:
             data = read_json(request)
+            geom = GEOSGeometry(data["geom"], srid=25830)
+
+            if not geom.valid:
+                return JsonResponse({"ok": False, "message": "Invalid geometry", "data": []})
+
+            # Check if linestring intersects with existing streets
+            existing = Street.objects.filter(geom__intersects=geom)
+            if existing.exists():
+                return JsonResponse({"ok": False, "message": "Street intersects with an existing street", "data": []})
+
             row = Street(
                 name=data["name"],
                 description=data["description"],
@@ -119,7 +140,7 @@ class StreetView(BaseDjangoView):
                 lanes=data["lanes"],
                 category=data["category"],
                 visitedAt=data["visitedAt"],
-                geom=GEOSGeometry(data["geom"], srid=25830)
+                geom=geom
             )
             row.save()
             return JsonResponse({"ok": True, "message": "Street inserted", "data": [street_to_dict(row)]})
@@ -171,13 +192,23 @@ class PointView(BaseDjangoView):
     def insert(self, request):
         try:
             data = read_json(request)
+            geom = GEOSGeometry(data["geom"], srid=25830)
+            
+            if not geom.valid:
+                return JsonResponse({"ok": False, "message": "Invalid geometry", "data": []})
+            
+            # Check if point is inside any building polygon
+            inside = Building.objects.filter(geom__contains=geom)
+            if not inside.exists():
+                return JsonResponse({"ok": False, "message": "Point must be inside a building polygon", "data": []})
+            
             row = Point(
                 name=data["name"],
                 description=data["description"],
                 category=data["category"],
                 visitedAt=data["visitedAt"],
                 rating=data["rating"],
-                geom=GEOSGeometry(data["geom"], srid=25830)
+                geom=geom
             )
             row.save()
             return JsonResponse({"ok": True, "message": "Point inserted", "data": [point_to_dict(row)]})

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import {OnInit, Component, OnDestroy } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MapService } from '../../services/map.service';
@@ -18,7 +18,7 @@ import { EventModel } from '../../models/event.model';
   templateUrl: './draw-point.component.html',
   styleUrl: './draw-point.component.scss'
 })
-export class DrawPointComponent implements AfterViewInit, OnDestroy{
+export class DrawPointComponent implements OnInit, OnDestroy{
   drawMode: boolean = false;
   drawPoint: Draw | undefined;
 
@@ -31,7 +31,7 @@ export class DrawPointComponent implements AfterViewInit, OnDestroy{
     });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     console.log("DrawPointComponent initialized");
     this.addDrawPointInteraction();
     this.disableDrawPoints();

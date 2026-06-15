@@ -195,3 +195,9 @@ table tr:hover {
 table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+.layer-switcher {
+    top: 50px !important;
+    left: 10px;
+    right: unset;
+}

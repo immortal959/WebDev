@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import {OnInit, Component, OnDestroy } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MapService } from '../../services/map.service';
@@ -18,7 +18,7 @@ import { EventModel } from '../../models/event.model';
   templateUrl: './draw-building.component.html',
   styleUrl: './draw-building.component.scss'
 })
-export class DrawBuildingComponent implements AfterViewInit, OnDestroy{
+export class DrawBuildingComponent implements OnInit, OnDestroy{
   drawMode: boolean = false;
   drawBuilding: Draw | undefined;
 
@@ -31,7 +31,7 @@ export class DrawBuildingComponent implements AfterViewInit, OnDestroy{
     });
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     console.log("DrawBuildingComponent initialized");
     this.addDrawBuildingInteraction();
     this.disableDrawBuildings();
