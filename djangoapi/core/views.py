@@ -64,6 +64,8 @@ class IsLoggedIn(View):
         print(request.user.username)
         print(request.user.is_authenticated)
         if request.user.is_authenticated:
-            return JsonResponse({"ok":True,"message": "You are authenticated", "data":[{'username':request.user.username}]}, status=200)
+            groups = list(request.user.groups.values_list('name', flat=True))
+            return JsonResponse({"ok":True,"message": "You are authenticated", "data":[{'username':request.user.username, 'groups': groups}]}, status=200)
         else:
             return JsonResponse({"ok":False,"message": "You are not authenticated", "data":[]}, status=400)
+            

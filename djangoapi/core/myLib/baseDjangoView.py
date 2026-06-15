@@ -3,37 +3,9 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class BaseDjangoView(LoginRequiredMixin, View):
-    """
-    DJANGO CLASS BASED VIEW
-
-    This class is a class based view that will handle the insert,
-    update, delete and select operations over the Buildings model.
-
-    LoginRequiredMixin ensures that only authenticated users can use these views.
-    Unauthenticated users will receive a 302 redirect, which Angular will handle
-    as an error in the subscribe error callback.
-
-    The class has the following methods:
-        -get() -> Handles the select operation. It will return the record with the id.
-        -post() -> Handles the insert, update, and delete operations.
-
-    To use this view:
-        1. Inherit from this class.
-        2. Implement the methods selectone, selectall, insert, update, and delete.
-        3. Register the view in the urls.py file. For example for the building model:
-            [...
-                path('buildings_view/<str:action>/', views.BuildigsView.as_view(), name='buildings_views'),
-                path('buildings_view/<str:action>/<int:id>/', views.BuildigsView.as_view(), name='buildings_views'),
-             ...
-            ]
-    """
-
-    # Instead of redirecting to login page, return 401 JSON response
-    # This is important for Angular - it expects JSON, not a redirect
     raise_exception = True
 
     def get(self, request, *args, **kwargs):
-        """Handles the 'select' method with a GET request."""
         action = kwargs.get('action')
         if action == 'selectone':
             id = kwargs.get('id')
@@ -44,9 +16,15 @@ class BaseDjangoView(LoginRequiredMixin, View):
             return JsonResponse({"message": "Invalid operation option"}, status=400)
 
     def post(self, request, *args, **kwargs):
-        """Handles insert, update, and delete depending on the URL parameter."""
         action = kwargs.get('action')
-        print(f"action father: {action}")
+        # Read-only actions allowed for all authenticated users
+        if action in ['selectone', 'selectall']:
+            return self.get(request, *args, **kwargs)
+        # Write actions only for editors
+        user_groups = list(request.user.groups.values_list('name', flat=True))
+        is_editor = 'editor' in user_groups or request.user.is_superuser
+        if not is_editor:
+            return JsonResponse({"ok": False, "message": "You don't have permission to perform this action. Editor group required.", "data": []}, status=403)
         if action == 'insert':
             return self.insert(request)
         elif action == 'update':
@@ -58,19 +36,17 @@ class BaseDjangoView(LoginRequiredMixin, View):
         else:
             return JsonResponse({"message": "Invalid operation option"}, status=400)
 
-    #GET OPERATIONS
     def selectone(self, id):
-        return JsonResponse({'ok': True, 'message': 'Method selectone called: GET', 'data': []}, status=200)
+        return JsonResponse({'ok':True, 'message': 'Method selectone called: GET', 'data': []}, status=200)
 
     def selectall(self):
-        return JsonResponse({'ok': True, 'message': 'Method selectall called: GET', 'data': []}, status=200)
+        return JsonResponse({'ok':True, 'message': 'Method selectall called: GET', 'data': []}, status=200)
 
-    #POST OPERATIONS
     def insert(self, request):
-        return JsonResponse({'ok': True, 'message': 'Method insert called: POST', 'data': []}, status=200)
+        return JsonResponse({'ok':True, 'message': 'Method insert called: POST', 'data': []}, status=200)
 
     def update(self, request, id):
-        return JsonResponse({'ok': True, 'message': 'Method update called: POST', 'data': []}, status=200)
+        return JsonResponse({'ok':True, 'message': 'Method update called: POST', 'data': []}, status=200)
 
     def delete(self, id):
-        return JsonResponse({'ok': True, 'message': 'Method delete called: POST', 'data': []}, status=200)
+        return JsonResponse({'ok':True, 'message': 'Method delete called: POST', 'data': []}, status=200)
