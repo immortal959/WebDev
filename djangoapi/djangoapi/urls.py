@@ -37,10 +37,10 @@ urlpatterns = [
     path("accounts/logout/", custom_logout_view, name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
 
-    path('codelist/', include('codelist.urls')),
     path('core/', include('core.urls')),
     path('buildings/', include('buildings.urls')),
     path('flowers/', include('flowers.urls')),
     path('accidentes/', include('accidentes.urls')),
     path('webcrud/', include('webcrud.urls')), #At the end of urlpatterns, add this line:
+    path('codelist/', include('codelist.urls')),
 ]

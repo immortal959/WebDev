@@ -8,24 +8,51 @@
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Name" [formControl]="name" name="name">
+                @if(name.hasError('required') && name.touched){
+                    <mat-error>Name is required</mat-error>
+                }
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Description" [formControl]="description" name="description">
+                @if(description.hasError('required') && description.touched){
+                    <mat-error>Description is required</mat-error>
+                }
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Floors" type="number" [formControl]="floors" name="floors">
+                @if(floors.hasError('required') && floors.touched){
+                    <mat-error>Floors is required</mat-error>
+                }
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Height (m)" type="number" [formControl]="height" name="height">
+                @if(height.hasError('required') && height.touched){
+                    <mat-error>Height is required</mat-error>
+                }
             </mat-form-field><br>
             <mat-form-field>
-                <input matInput placeholder="Category" [formControl]="category" name="category">
+                <input matInput placeholder="Category" [formControl]="category" name="category"
+                    [matAutocomplete]="autoCat">
+                <mat-autocomplete #autoCat="matAutocomplete">
+                    @for(cat of filteredCategories | async; track cat.id) {
+                        <mat-option [value]="cat.name">{{cat.name}}</mat-option>
+                    }
+                </mat-autocomplete>
+                @if(category.hasError('required') && category.touched){
+                    <mat-error>Category is required</mat-error>
+                }
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Visited at (e.g. 2026-06-15T10:00:00Z)" [formControl]="visitedAt" name="visitedAt">
+                @if(visitedAt.hasError('required') && visitedAt.touched){
+                    <mat-error>Visited at is required</mat-error>
+                }
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Geometry WKT" [formControl]="geom" name="geom">
+                @if(geom.hasError('required') && geom.touched){
+                    <mat-error>Geometry is required - draw it on the map!</mat-error>
+                }
             </mat-form-field><br>
             <button mat-button matTooltip="Insert" mat-raised-button [disabled]="!controlsGroup.valid" (click)="insert()">Insert</button>
             <button mat-button matTooltip="Delete" (click)="deleteRow()">Delete</button>
@@ -47,13 +74,13 @@
                     <th>id</th><th>name</th><th>description</th><th>floors</th><th>height</th><th>category</th>
                 </tr>
                 @for (b of l; track b['id']) {
-                    <tr (click)="id.setValue(b['id']); name.setValue(b['name']); description.setValue(b['description']); floors.setValue(b['floors']); height.setValue(b['height']); category.setValue(b['category']); visitedAt.setValue(b['visitedAt']); geom.setValue(b['geom'])">
+                    <tr (click)="id.setValue(b['id']); name.setValue(b['name']); description.setValue(b['description']); floors.setValue(b['floors']); height.setValue(b['height']); category.setValue(b['category_name']); visitedAt.setValue(b['visitedAt']); geom.setValue(b['geom'])">
                         <td>{{b['id']}}</td>
                         <td>{{b['name']}}</td>
                         <td>{{b['description']}}</td>
                         <td>{{b['floors']}}</td>
                         <td>{{b['height']}}</td>
-                        <td>{{b['category']}}</td>
+                        <td>{{b['category_name']}}</td>
                     </tr>
                 }
             </table>

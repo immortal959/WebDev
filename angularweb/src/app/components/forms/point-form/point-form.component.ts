@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatInputModule} from "@angular/material/input";
+import { MatInputModule } from "@angular/material/input";
 import { MatTooltip } from '@angular/material/tooltip';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {FormControl} from '@angular/forms';
-import {FormGroup, Validators} from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../../services/api.service';
 import { ServerAnswerModel } from '../../../models/server-answer.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-point-form',
   standalone: true,
-  imports: [CommonModule, MatInputModule, ReactiveFormsModule, MatTooltip, MatButtonModule, MatCardModule],
+  imports: [CommonModule, MatInputModule, ReactiveFormsModule, MatTooltip, MatButtonModule, MatCardModule, MatAutocompleteModule],
   templateUrl: './point-form.component.html',
   styleUrl: './point-form.component.scss'
 })
@@ -22,6 +24,8 @@ export class PointFormComponent implements OnInit {
   geomInUrl = false;
   l: any[] = [];
   serverMessage = '';
+  categories: any[] = [];
+  filteredCategories!: Observable<any[]>;
 
   id = new FormControl('');
   name = new FormControl('', [Validators.required]);
@@ -32,13 +36,9 @@ export class PointFormComponent implements OnInit {
   geom = new FormControl('', [Validators.required, Validators.minLength(5)]);
 
   controlsGroup = new FormGroup({
-    id: this.id,
-    name: this.name,
-    description: this.description,
-    category: this.category,
-    visitedAt: this.visitedAt,
-    rating: this.rating,
-    geom: this.geom
+    id: this.id, name: this.name, description: this.description,
+    category: this.category, visitedAt: this.visitedAt,
+    rating: this.rating, geom: this.geom
   });
 
   constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute,
@@ -49,11 +49,36 @@ export class PointFormComponent implements OnInit {
       const geom = params.get("geom");
       if (geom) { this.geom.setValue(geom); this.geomInUrl = true; }
     });
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.apiService.get('codelist/point-category/').subscribe({
+      next: (response: ServerAnswerModel) => {
+        this.categories = response.data;
+        this.filteredCategories = this.category.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(value || ''))
+        );
+      },
+      error: error => { console.log(error); }
+    });
+  }
+
+  private _filter(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.categories.filter(cat => cat.name.toLowerCase().includes(filterValue));
+  }
+
+  getCategoryId(): number | null {
+    const cat = this.categories.find(c => c.name === this.category.value);
+    return cat ? cat.id : null;
   }
 
   insert() {
     this.serverMessage = '';
-    this.apiService.post('webcrud/point/insert/', this.controlsGroup.value).subscribe({
+    const data = { ...this.controlsGroup.value, category: this.getCategoryId() };
+    this.apiService.post('webcrud/point/insert/', data).subscribe({
       next: (response: ServerAnswerModel) => {
         this.serverMessage = response.message;
         if (response.ok) { this.selectAll(); }
@@ -70,9 +95,12 @@ export class PointFormComponent implements OnInit {
         if (response.ok && response.data.length > 0) {
           const d = response.data[0];
           this.id.setValue(d['id']); this.name.setValue(d['name']);
-          this.description.setValue(d['description']); this.category.setValue(d['category']);
-          this.visitedAt.setValue(d['visitedAt']); this.rating.setValue(d['rating']);
-          this.geom.setValue(d['geom']); this.clearList();
+          this.description.setValue(d['description']);
+          const cat = this.categories.find(c => c.id === d['category']);
+          this.category.setValue(cat ? cat.name : '');
+          this.visitedAt.setValue(d['visitedAt']);
+          this.rating.setValue(d['rating']); this.geom.setValue(d['geom']);
+          this.clearList();
         }
         this.serverMessage = response.message;
       },
@@ -84,8 +112,7 @@ export class PointFormComponent implements OnInit {
     this.serverMessage = '';
     this.apiService.get('webcrud/point/selectall/').subscribe({
       next: (response: ServerAnswerModel) => {
-        this.l = response.data;
-        this.serverMessage = response.message;
+        this.l = response.data; this.serverMessage = response.message;
       },
       error: error => { console.log(error); }
     });
@@ -106,7 +133,8 @@ export class PointFormComponent implements OnInit {
   update() {
     this.serverMessage = '';
     if (!this.id.value) { this.serverMessage = 'Put an id'; return; }
-    this.apiService.post('webcrud/point/update/' + this.id.value + '/', this.controlsGroup.value).subscribe({
+    const data = { ...this.controlsGroup.value, category: this.getCategoryId() };
+    this.apiService.post('webcrud/point/update/' + this.id.value + '/', data).subscribe({
       next: (response: ServerAnswerModel) => {
         if (response.ok) { this.selectAll(); }
         this.serverMessage = response.message;

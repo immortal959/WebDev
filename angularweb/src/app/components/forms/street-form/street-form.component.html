@@ -8,24 +8,37 @@
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Name" [formControl]="name" name="name">
+                @if(name.hasError('required') && name.touched){<mat-error>Name is required</mat-error>}
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Description" [formControl]="description" name="description">
+                @if(description.hasError('required') && description.touched){<mat-error>Description is required</mat-error>}
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Length (m)" type="number" [formControl]="length" name="length">
+                @if(length.hasError('required') && length.touched){<mat-error>Length is required</mat-error>}
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Lanes" type="number" [formControl]="lanes" name="lanes">
+                @if(lanes.hasError('required') && lanes.touched){<mat-error>Lanes is required</mat-error>}
             </mat-form-field><br>
             <mat-form-field>
-                <input matInput placeholder="Category" [formControl]="category" name="category">
+                <input matInput placeholder="Category" [formControl]="category" name="category"
+                    [matAutocomplete]="autoCat">
+                <mat-autocomplete #autoCat="matAutocomplete">
+                    @for(cat of filteredCategories | async; track cat.id) {
+                        <mat-option [value]="cat.name">{{cat.name}}</mat-option>
+                    }
+                </mat-autocomplete>
+                @if(category.hasError('required') && category.touched){<mat-error>Category is required</mat-error>}
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Visited at (e.g. 2026-06-15T10:00:00Z)" [formControl]="visitedAt" name="visitedAt">
+                @if(visitedAt.hasError('required') && visitedAt.touched){<mat-error>Visited at is required</mat-error>}
             </mat-form-field><br>
             <mat-form-field>
                 <input matInput placeholder="Geometry WKT" [formControl]="geom" name="geom">
+                @if(geom.hasError('required') && geom.touched){<mat-error>Geometry is required - draw it on the map!</mat-error>}
             </mat-form-field><br>
             <button mat-button matTooltip="Insert" mat-raised-button [disabled]="!controlsGroup.valid" (click)="insert()">Insert</button>
             <button mat-button matTooltip="Delete" (click)="deleteRow()">Delete</button>
@@ -43,13 +56,11 @@
     @if (l.length > 0) {
         <div class="margin-10px">
             <table>
-                <tr>
-                    <th>id</th><th>name</th><th>description</th><th>length</th><th>lanes</th><th>category</th>
-                </tr>
+                <tr><th>id</th><th>name</th><th>description</th><th>length</th><th>lanes</th><th>category</th></tr>
                 @for (s of l; track s['id']) {
-                    <tr (click)="id.setValue(s['id']); name.setValue(s['name']); description.setValue(s['description']); length.setValue(s['length']); lanes.setValue(s['lanes']); category.setValue(s['category']); visitedAt.setValue(s['visitedAt']); geom.setValue(s['geom'])">
+                    <tr (click)="id.setValue(s['id']); name.setValue(s['name']); description.setValue(s['description']); length.setValue(s['length']); lanes.setValue(s['lanes']); category.setValue(s['category_name']); visitedAt.setValue(s['visitedAt']); geom.setValue(s['geom'])">
                         <td>{{s['id']}}</td><td>{{s['name']}}</td><td>{{s['description']}}</td>
-                        <td>{{s['length']}}</td><td>{{s['lanes']}}</td><td>{{s['category']}}</td>
+                        <td>{{s['length']}}</td><td>{{s['lanes']}}</td><td>{{s['category_name']}}</td>
                     </tr>
                 }
             </table>
