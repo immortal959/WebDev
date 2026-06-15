@@ -3,6 +3,7 @@ import { MapService } from '../../services/map.service';
 import { DrawBuildingComponent } from '../draw-building/draw-building.component';
 import { DrawStreetComponent } from '../draw-street/draw-street.component';
 import { DrawPointComponent } from '../draw-point/draw-point.component';
+import { SelectFeatureComponent } from '../select-feature/select-feature.component';
 import { ApiService } from '../../services/api.service';
 import { ServerAnswerModel } from '../../models/server-answer.model';
 import WKT from 'ol/format/WKT';
@@ -11,7 +12,7 @@ import Feature from 'ol/Feature';
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [DrawBuildingComponent, DrawStreetComponent, DrawPointComponent],
+  imports: [DrawBuildingComponent, DrawStreetComponent, DrawPointComponent, SelectFeatureComponent],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
@@ -20,8 +21,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(public mapService: MapService, private apiService: ApiService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     console.log('mapComponent initialized');
@@ -33,7 +33,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   loadAllGeometries(): void {
     const wktFormat = new WKT();
 
-    // Load all buildings
     this.apiService.get('webcrud/building/selectall/').subscribe({
       next: (response: ServerAnswerModel) => {
         if (response.ok) {
@@ -44,10 +43,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
               try {
                 const geometry = wktFormat.readGeometry(item.geom);
                 const feature = new Feature({ geometry: geometry });
+                feature.setProperties({ id: item.id, name: item.name, layerType: 'building' });
                 source.addFeature(feature);
-              } catch (e) {
-                console.log('Error parsing building geometry:', e);
-              }
+              } catch (e) { console.log('Error parsing building geometry:', e); }
             });
           }
         }
@@ -55,7 +53,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       error: (error: any) => { console.log(error); }
     });
 
-    // Load all streets
     this.apiService.get('webcrud/street/selectall/').subscribe({
       next: (response: ServerAnswerModel) => {
         if (response.ok) {
@@ -66,10 +63,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
               try {
                 const geometry = wktFormat.readGeometry(item.geom);
                 const feature = new Feature({ geometry: geometry });
+                feature.setProperties({ id: item.id, name: item.name, layerType: 'street' });
                 source.addFeature(feature);
-              } catch (e) {
-                console.log('Error parsing street geometry:', e);
-              }
+              } catch (e) { console.log('Error parsing street geometry:', e); }
             });
           }
         }
@@ -77,7 +73,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       error: (error: any) => { console.log(error); }
     });
 
-    // Load all points
     this.apiService.get('webcrud/point/selectall/').subscribe({
       next: (response: ServerAnswerModel) => {
         if (response.ok) {
@@ -88,10 +83,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
               try {
                 const geometry = wktFormat.readGeometry(item.geom);
                 const feature = new Feature({ geometry: geometry });
+                feature.setProperties({ id: item.id, name: item.name, layerType: 'point' });
                 source.addFeature(feature);
-              } catch (e) {
-                console.log('Error parsing point geometry:', e);
-              }
+              } catch (e) { console.log('Error parsing point geometry:', e); }
             });
           }
         }
