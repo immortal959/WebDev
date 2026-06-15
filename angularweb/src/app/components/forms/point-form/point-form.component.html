@@ -1,0 +1,56 @@
+<div class="flexbox-exterior-container">
+    <div class="flexbox-responsive-interior-container-500px">
+        <h6 class="text-align-center">Points form</h6>
+
+        <form [formGroup]="controlsGroup">
+            <p>Specify the id only in case of select, update or delete</p>
+            <mat-form-field>
+                <input matInput placeholder="id" [formControl]="id" name="id">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Name" [formControl]="name" name="name">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Description" [formControl]="description" name="description">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+                <input matInput placeholder="Geometry WKT" [formControl]="geom" name="geom">
+            </mat-form-field>
+            <br>
+            <button mat-button matTooltip="Insert" mat-raised-button [disabled]="!controlsGroup.valid" (click)="insert()">Insert</button>
+            <button mat-button matTooltip="Delete" (click)="deleteRow()">Delete</button>
+            <button mat-button matTooltip="Update" (click)="update()">Update</button>
+            <button mat-button matTooltip="Select" (click)="select()">Select</button>
+            <button mat-button matTooltip="Select all" (click)="selectAll()">Select all</button>
+            @if (geomInUrl){
+                <button mat-button matTooltip="Use geom in url" (click)="useGeomInUrl()">Use geom in url</button>
+            }
+            <button mat-button matTooltip="Clear form" (click)="clearForm()">Clear form</button>
+            <br>
+            <p>{{serverMessage}}</p>
+        </form>
+    </div>
+    @if (l.length > 0){
+        <div class="margin-10px">
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>description</th>
+                    <th>geom</th>
+                </tr>
+                @for (p of l;track p.id){
+                    <tr (click)="setDataInForm(p)">
+                        <td>{{p.id}}</td>
+                        <td>{{p.name}}</td>
+                        <td>{{p.description}}</td>
+                        <td>{{p.geom}}</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>

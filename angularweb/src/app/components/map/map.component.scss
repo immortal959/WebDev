@@ -1,0 +1,41 @@
+#map {
+    position: relative;
+    background-color: #add8e6;
+    z-index: 0;
+    overflow: hidden;
+    width: 100%;
+    height: calc(100vh - 150px);
+}
+
+#draw-building {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 1;
+    border-radius: 5px;
+    background: white;
+    min-width: 48px;
+    width: auto;
+}
+
+#draw-street {
+    position: absolute;
+    right: 10px;
+    top: 50px;
+    z-index: 1;
+    border-radius: 5px;
+    background: white;
+    min-width: 48px;
+    width: auto;
+}
+
+#draw-point {
+    position: absolute;
+    right: 10px;
+    top: 90px;
+    z-index: 1;
+    border-radius: 5px;
+    background: white;
+    min-width: 48px;
+    width: auto;
+}
