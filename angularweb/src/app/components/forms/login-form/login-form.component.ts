@@ -40,6 +40,7 @@ export class LoginFormComponent {
         if (response.ok){
           this.authService.username = this.username.value!;
           this.authService.isAuthenticated = true;
+          this.authService.checkIsLoggedInInServer();
         }
         this.serverMessage=response.message;
       },

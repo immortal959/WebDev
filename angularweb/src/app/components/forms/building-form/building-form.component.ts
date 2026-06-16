@@ -121,7 +121,13 @@ export class BuildingFormComponent implements OnInit {
         this.serverMessage = response.message;
         if (response.ok) { this.selectAll(); }
       },
-      error: error => { console.log(error); }
+      error: (error: any) => {
+        if (error.status === 403) {
+          this.serverMessage = 'You do not have permission. Editor group required.';
+        } else {
+          this.serverMessage = 'Error: ' + error.message;
+        }
+      }
     });
   }
 
@@ -168,7 +174,13 @@ export class BuildingFormComponent implements OnInit {
         if (response.ok) { this.clearForm(); this.selectAll(); }
         this.serverMessage = response.message;
       },
-      error: error => { console.log(error); }
+      error: (error: any) => {
+        if (error.status === 403) {
+          this.serverMessage = 'You do not have permission. Editor group required.';
+        } else {
+          this.serverMessage = 'Error: ' + error.message;
+        }
+      }
     });
   }
 
@@ -184,7 +196,13 @@ export class BuildingFormComponent implements OnInit {
         if (response.ok) { this.selectAll(); }
         this.serverMessage = response.message;
       },
-      error: error => { console.log(error); }
+      error: (error: any) => {
+        if (error.status === 403) {
+          this.serverMessage = 'You do not have permission. Editor group required.';
+        } else {
+          this.serverMessage = 'Error: ' + error.message;
+        }
+      }
     });
   }
 
