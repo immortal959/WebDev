@@ -1,0 +1,37 @@
+.sidenav-container {
+    height: 100%;
+  }
+  
+  .sidenav {
+    width: 250px;
+    padding: 16px;
+  }
+  
+  .sidenav-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 4px 0;
+  }
+  
+  .desktop-menu {
+    display: block;
+  }
+  
+  .hamburger-btn {
+    display: none;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    z-index: 1000;
+    background: white;
+  }
+  
+  @media (max-width: 768px) {
+    .hamburger-btn {
+      display: block;
+    }
+    .desktop-menu {
+      display: none;
+    }
+  }

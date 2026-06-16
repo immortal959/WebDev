@@ -1,6 +1,25 @@
-<app-menu></app-menu>
-<app-header></app-header>
-
-<router-outlet></router-outlet>
-
-<app-footer></app-footer>
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="over" class="sidenav">
+      <div class="sidenav-menu">
+        <button mat-button routerLink='home' (click)="sidenav.close()">Home</button><br>
+        <button mat-button routerLink='map' (click)="sidenav.close()">Map</button><br>
+        <button mat-button routerLink='help' (click)="sidenav.close()">Help</button><br>
+        <button mat-button routerLink='building-form' (click)="sidenav.close()">Building form</button><br>
+        <button mat-button routerLink='street-form' (click)="sidenav.close()">Street form</button><br>
+        <button mat-button routerLink='point-form' (click)="sidenav.close()">Point form</button><br>
+        <button mat-button routerLink='login-form' (click)="sidenav.close()">Login</button><br>
+        <button mat-button routerLink='logout-form' (click)="sidenav.close()">Logout</button><br>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="desktop-menu">
+        <app-menu></app-menu>
+      </div>
+      <button mat-icon-button class="hamburger-btn" (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <app-header></app-header>
+      <router-outlet></router-outlet>
+      <app-footer></app-footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

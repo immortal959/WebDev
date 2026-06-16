@@ -4,7 +4,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MapService } from '../../services/map.service';
 import { EventService } from '../../services/event.service';
 import { EventModel } from '../../models/event.model';
-import { Modify, Select } from 'ol/interaction';
+import { Modify, Select, Snap } from 'ol/interaction';
 import { click } from 'ol/events/condition';
 import { Collection } from 'ol';
 import Feature from 'ol/Feature';
@@ -20,6 +20,7 @@ export class EditFeatureComponent implements OnInit, OnDestroy {
   editMode: boolean = false;
   private selectForEdit: Select | null = null;
   private modifyInteraction: Modify | null = null;
+  private snapInteraction: Snap | null = null;
 
   constructor(
     public mapService: MapService,
@@ -55,6 +56,24 @@ export class EditFeatureComponent implements OnInit, OnDestroy {
     this.mapService.map?.addInteraction(this.modifyInteraction);
     this.selectForEdit.setActive(false);
     this.modifyInteraction.setActive(false);
+
+    // Add Snap interaction for all vector layers
+    const buildingSource = this.mapService.getLayerByTitle('Buildings vector')?.getSource();
+    const streetSource = this.mapService.getLayerByTitle('Streets vector')?.getSource();
+    const pointSource = this.mapService.getLayerByTitle('Points vector')?.getSource();
+    
+    if (buildingSource) {
+      const snapBuilding = new Snap({ source: buildingSource as any });
+      this.mapService.map?.addInteraction(snapBuilding);
+    }
+    if (streetSource) {
+      const snapStreet = new Snap({ source: streetSource as any });
+      this.mapService.map?.addInteraction(snapStreet);
+    }
+    if (pointSource) {
+      const snapPoint = new Snap({ source: pointSource as any });
+      this.mapService.map?.addInteraction(snapPoint);
+    }
   }
 
   toggleEditMode(): void {
