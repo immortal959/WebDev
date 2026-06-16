@@ -45,16 +45,39 @@ export class PointFormComponent implements OnInit {
     public router: Router) {}
 
   ngOnInit(): void {
+    this.loadCategories();
     this.activatedRoute.queryParamMap.subscribe(params => {
       const geom = params.get("geom");
       const id = params.get("id");
-      if (geom) { this.geom.setValue(geom); this.geomInUrl = true; }
+      if (geom) {
+        this.geom.setValue(geom);
+        this.geomInUrl = true;
+      }
       if (id) {
         this.id.setValue(id);
-        this.select();
+        setTimeout(() => {
+          this.apiService.get('webcrud/point/selectone/' + id + '/').subscribe({
+            next: (response: ServerAnswerModel) => {
+              if (response.ok && response.data.length > 0) {
+                const d = response.data[0];
+                this.name.setValue(d['name']);
+                this.description.setValue(d['description']);
+                const cat = this.categories.find((c: any) => c.id === d['category']);
+                this.category.setValue(cat ? cat.name : '');
+                this.visitedAt.setValue(d['visitedAt']);
+                this.rating.setValue(d['rating']);
+                if (geom) {
+                  this.geom.setValue(geom);
+                } else {
+                  this.geom.setValue(d['geom']);
+                }
+              }
+            },
+            error: error => { console.log(error); }
+          });
+        }, 500);
       }
     });
-    this.loadCategories();
   }
 
   loadCategories(): void {
