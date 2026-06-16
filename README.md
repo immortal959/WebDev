@@ -20,9 +20,8 @@ PgAdmin is like a "window" into the database, when first setting it up it might 
 PgAdmin in our case has several databases, the database **web** is used for the psycopg stuff and **web_proj** is used for the Django Stuff. 
 
 
-The database for the Django Project is set in the file .env.dev:
+The database for the Django Project is set in the file .env.dev
 
-<img width="463" height="155" alt="image" src="https://github.com/user-attachments/assets/9e0e99c3-bf89-4d18-be74-3e15e5a3f472" />
 
 The database for the psycopg part is set in scripts/p1/mylib/p1_settings.py
 <img width="459" height="271" alt="image" src="https://github.com/user-attachments/assets/84ae6add-1b8c-430a-93c6-fb7ff9d70192" />
